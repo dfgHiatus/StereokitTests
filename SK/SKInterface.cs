@@ -1,7 +1,7 @@
 ﻿using System.Runtime.InteropServices;
 using System.Text;
 
-namespace Tests
+namespace SKEyeTracking.Data
 {
     [StructLayout(LayoutKind.Sequential)]
     public struct EyeData
@@ -37,7 +37,7 @@ namespace Tests
         public Vec3 direction;              //!< The direction the ray is facing, typically does not require being a unit vector, or normalized direction.
         public Vec3 position;               //!< The position or origin point of the Ray.
     }
-    
+
     [StructLayout(LayoutKind.Sequential)]
     public struct Vec3
     {
@@ -61,11 +61,11 @@ namespace Tests
         protected EyeData eyeData;
         protected const string memoryMappedFileName = "StereokitEyeTracking";
         private readonly StringBuilder sb = new StringBuilder();
-        
+
         public string GetDebugData()
         {
             sb.Clear();
-            
+
             sb.AppendLine($"Left eye data:");
             sb.AppendLine($"Pose:");
             sb.AppendLine($"Forward: {PrintStruct(eyeData.leftEye.pose.forward)}");

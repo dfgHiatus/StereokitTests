@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.2.32602.215
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SK", "ModNameGoesHere\SK.csproj", "{0322B2EF-7452-479D-BAE2-FCAB75033337}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SK", "SK\SK.csproj", "{0322B2EF-7452-479D-BAE2-FCAB75033337}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SK.Tests", "SK.Tests\SK.Tests.csproj", "{3CCEAA7B-4040-4F6D-B3BE-A0B6ED33202A}"
 EndProject

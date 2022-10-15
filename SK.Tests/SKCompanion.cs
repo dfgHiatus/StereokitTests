@@ -20,7 +20,12 @@ namespace Tests
 
             return true;
         }
-        
+
+        public EyeData GetEyeData()
+        {
+            return eyeData;
+        }
+
         public override bool Update()
         {
             return SK.Step();
