@@ -13,7 +13,11 @@ namespace SKEyeTracking
         public override void OnEngineInit()
         {
             new Harmony("net.dfgHiatus.StereokitEyeTracking").PatchAll();
-            Engine.Current.InputInterface.RegisterInputDriver(new SKEyeDevice());
+            SKEyeDevice device = new SKEyeDevice();
+            Engine.Current.OnReady += () =>
+            {
+                Engine.Current.InputInterface.RegisterInputDriver(device);
+            };
         }
     }
 }

@@ -1,26 +1,20 @@
 ﻿using BaseX;
 using FrooxEngine;
-using SKEyeTracking.Data;
 
 namespace SKEyeTracking
 {
     public class SKEyeDevice : IInputDriver
     {
-        private SKListener SKListener;
+        private SKWebsocketEyeDevice SKWebsocket;
         private Eyes eyes;
         public int UpdateOrder => 100;
 
         public SKEyeDevice()
         {
-            SKListener = new SKListener();
-            SKListener.Initialize();
-            
-            Engine.Current.OnShutdown += Teardown;
-        }
-
-        private void Teardown()
-        {
-            SKListener.Teardown();
+            SKWebsocket = new SKWebsocketEyeDevice();
+            SKWebsocket.OnInit();
+            SKWebsocket.StartThread();
+            Engine.Current.OnShutdown += () => SKWebsocket.Teardown();
         }
 
         public void CollectDeviceInfos(DataTreeList list)
@@ -39,12 +33,34 @@ namespace SKEyeTracking
 
         public void UpdateInputs(float deltaTime)
         {
-            SKListener.Update();
-            var eyeData = SKListener.GetEyeData();
+            var eyeData = SKWebsocket.lastData;
 
             // SK only tracks combined eye information
+#if DEBUG
+            eyes.IsEyeTrackingActive = true;
+            UpdateEye(
+                eyeData.combinedEye.pose.forward.Vec3ToFloat3(),
+                eyeData.combinedEye.pose.position.Vec3ToFloat3(),
+                true,
+                0.0035f,
+                true ? 1f : 0f,
+                0f, 0f, 0f, deltaTime, eyes.LeftEye);
+            UpdateEye(
+                eyeData.combinedEye.pose.forward.Vec3ToFloat3(),
+                eyeData.combinedEye.pose.position.Vec3ToFloat3(),
+                true,
+                0.0035f,
+                true ? 1f : 0f,
+                0f, 0f, 0f, deltaTime, eyes.RightEye);
+            UpdateEye(
+                eyeData.combinedEye.pose.forward.Vec3ToFloat3(), 
+                eyeData.combinedEye.pose.position.Vec3ToFloat3(), 
+                true, 
+                0.0035f,
+                true ? 1f : 0f,
+                0f, 0f, 0f, deltaTime, eyes.CombinedEye);
+#else
             eyes.IsEyeTrackingActive = eyeData.combinedEye.eyeTrackingPresent;
-
             UpdateEye(
                 eyeData.leftEye.pose.forward.Vec3ToFloat3(),
                 eyeData.leftEye.pose.position.Vec3ToFloat3(),
@@ -66,6 +82,8 @@ namespace SKEyeTracking
                 0.0035f, 
                 eyeData.combinedEye.eyesTracked ? 1f : 0f,
                 0f, 0f, 0f, deltaTime, eyes.CombinedEye);
+#endif
+
 
             eyes.ComputeCombinedEyeParameters();
             eyes.ConvergenceDistance = 0f;
@@ -91,7 +109,5 @@ namespace SKEyeTracking
             eye.Squeeze = squeeze;
             eye.Frown = frown;
         }
-
-
     }
 }

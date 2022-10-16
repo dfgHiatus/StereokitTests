@@ -6,13 +6,15 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ModNameGoesHere</RootNamespace>
-    <AssemblyName>ModNameGoesHere</AssemblyName>
+    <RootNamespace>SKEyeTracking</RootNamespace>
+    <AssemblyName>SKEyeTracking</AssemblyName>
     <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
     <TargetFrameworkProfile />
     <ProjectGuid>{0322B2EF-7452-479D-BAE2-FCAB75033337}</ProjectGuid>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -44,22 +46,44 @@
     <Reference Include="NeosModLoader">
       <HintPath>C:\Program Files (x86)\Steam\steamapps\common\NeosVR\Libraries\NeosModLoader.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>C:\Program Files (x86)\Steam\steamapps\common\NeosVR\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="StereoKit, Version=0.3.7.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\StereoKit.0.3.7-preview.5\lib\netstandard2.0\StereoKit.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Numerics" />
+    <Reference Include="System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Numerics.Vectors.4.5.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
+    </Reference>
+    <Reference Include="websocket-sharp">
+      <HintPath>C:\Program Files (x86)\Steam\steamapps\common\NeosVR\websocket-sharp.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Companion\SKCompanionEyeDevice.cs" />
     <Compile Include="SKExtensions.cs" />
     <Compile Include="SKEyeMod.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SKEyeDevice.cs" />
-    <Compile Include="SKListener.cs" />
     <Compile Include="SKInterface.cs" />
+    <Compile Include="Websocket\SKWebsocketEyeDevice.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>copy "$(TargetDir)\$(TargetFileName)" "C:\Program Files (x86)\Steam\steamapps\common\NeosVR\nml_mods\"</PostBuildEvent>
   </PropertyGroup>
+  <Import Project="..\packages\StereoKit.0.3.7-preview.5\build\StereoKit.targets" Condition="Exists('..\packages\StereoKit.0.3.7-preview.5\build\StereoKit.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\StereoKit.0.3.7-preview.5\build\StereoKit.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\StereoKit.0.3.7-preview.5\build\StereoKit.targets'))" />
+  </Target>
 </Project>
